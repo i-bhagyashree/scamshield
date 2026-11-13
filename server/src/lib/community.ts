@@ -2,18 +2,9 @@ import { db } from '../db.js'
 import type { EntityType } from '../analyzer/extract.js'
 import { REPUTATION_SQL, TRUSTED_AT } from './reputation.js'
 import { VISIBLE_SQL } from './moderation.js'
+import type { CommunityMatch } from '../analyzer/core.js'
 
-export interface CommunityMatch {
-  type: EntityType
-  value: string
-  reports: number
-  confirmations: number
-  /** Reports filed by trusted reporters (people whose earlier reports others confirmed). */
-  trustedReports: number
-  categories: string[]
-  totalLost: number
-  lastReportedAt: string | null
-}
+export type { CommunityMatch }
 
 const lookupStmt = db.prepare(`
   SELECT COUNT(*)                          AS reports,

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { api, post } from '../lib/api'
 import { rupees, timeAgo } from '../lib/format'
 import { TYPE_LABEL, type Report } from '../lib/types'
+import { STATIC_DEMO } from '../lib/staticMode'
 
 const FLAG_REASONS = [
   { value: 'wrong', label: 'This number / ID is not a scammer' },
@@ -76,7 +77,7 @@ export default function ReportCard({ report }: { report: Report }) {
           {report.amountLost > 0 && <> · <strong className="lost">{rupees(report.amountLost)} lost</strong></>}
         </span>
         <div className="report-actions">
-          {report.isMine ? (
+          {STATIC_DEMO ? null : report.isMine ? (
             <button className="btn btn-link btn-sm" onClick={remove}>Delete</button>
           ) : (
             <>

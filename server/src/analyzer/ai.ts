@@ -7,7 +7,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod'
 import * as z from 'zod/v4'
 import { config } from '../config.js'
-import type { Category } from './rules.js'
+import type { AiVerdict } from './core.js'
 
 const CATEGORY_VALUES = [
   'kyc_bank', 'otp_fraud', 'lottery_prize', 'job_task', 'fake_internship', 'electricity_bill', 'digital_arrest',
@@ -21,7 +21,7 @@ const AiVerdictSchema = z.object({
   red_flags: z.array(z.string()).describe('Specific warning signs found in this message, each under 15 words. Empty if none.'),
 })
 
-export type AiVerdict = z.infer<typeof AiVerdictSchema> & { category: Category | 'not_scam' }
+export type { AiVerdict }
 
 const SYSTEM_PROMPT = `You are a fraud analyst who protects people in India from scams sent over SMS, WhatsApp, email, phone calls and websites.
 

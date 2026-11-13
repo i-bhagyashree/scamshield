@@ -5,6 +5,7 @@
 import { db } from '../db.js'
 import { config } from '../config.js'
 import type { Signal } from './url.js'
+import { domainAgeSignalFromDate } from './core.js'
 
 const CACHE_DAYS = 7
 const TIMEOUT_MS = 3500
@@ -49,23 +50,7 @@ export async function getDomainRegistration(domain: string): Promise<string | nu
   }
 }
 
-export function ageInDays(isoDate: string, now = Date.now()): number {
-  return Math.floor((now - new Date(isoDate).getTime()) / 86_400_000)
-}
-
 export async function domainAgeSignal(domain: string): Promise<Signal | null> {
   const registered = await getDomainRegistration(domain)
-  if (!registered) return null
-  const days = ageInDays(registered)
-  if (Number.isNaN(days) || days < 0) return null
-  if (days <= 30) {
-    return { id: `age:${domain}`, label: `Website is only ${days} day${days === 1 ? '' : 's'} old`, detail: `${domain} was registered on ${registered.slice(0, 10)}. Most scam websites are created days before a campaign and abandoned soon after.`, weight: 35, source: 'domain' }
-  }
-  if (days <= 180) {
-    return { id: `age:${domain}`, label: `Website is new (${Math.round(days / 30)} months old)`, detail: `${domain} was registered on ${registered.slice(0, 10)}. Newer domains are more likely to be throwaway sites.`, weight: 12, source: 'domain' }
-  }
-  if (days > 3 * 365) {
-    return { id: `age:${domain}`, label: `Website has existed for ${Math.floor(days / 365)} years`, detail: `${domain} was registered on ${registered.slice(0, 10)}. An older domain is a mildly positive sign, but it does not prove the site is safe.`, weight: -5, source: 'trust' }
-  }
-  return null
+  return registered ? domainAgeSignalFromDate(domain, registered) : null
 }

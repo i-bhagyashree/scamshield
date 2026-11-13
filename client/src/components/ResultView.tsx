@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import RiskMeter from './RiskMeter'
 import { VERDICT_TEXT, rupees } from '../lib/format'
 import { TYPE_LABEL, type CheckResult, type Signal } from '../lib/types'
+import { REPO_URL, STATIC_DEMO } from '../lib/staticMode'
 
 const SOURCE_LABEL: Record<Signal['source'], string> = {
   pattern: 'Message', link: 'Link', domain: 'Domain age', community: 'Community', ai: 'AI', trust: 'Good sign',
@@ -10,13 +11,14 @@ const SOURCE_LABEL: Record<Signal['source'], string> = {
 
 function shareText(r: CheckResult, url: string) {
   const head = r.verdict === 'dangerous' ? '⚠️ SCAM ALERT' : r.verdict === 'suspicious' ? '⚠️ Be careful' : 'ℹ️ Checked'
-  return `${head}: I checked a message on ScamShield. Result: ${r.categoryLabel} (risk ${r.score}/100). Never share OTPs or PINs. Details: ${url}`
+  // In the browser-only demo, result links only open in the browser that made them, so share the site instead.
+  return `${head}: I checked a message on ScamShield. Result: ${r.categoryLabel} (risk ${r.score}/100). Never share OTPs or PINs. ${STATIC_DEMO ? `Check yours: ${window.location.origin}${import.meta.env.BASE_URL}` : `Details: ${url}`}`
 }
 
 export default function ResultView({ result, showActions = true }: { result: CheckResult; showActions?: boolean }) {
   const [copied, setCopied] = useState(false)
   const v = VERDICT_TEXT[result.verdict]
-  const shareUrl = `${window.location.origin}/r/${result.id}`
+  const shareUrl = `${window.location.origin}${import.meta.env.BASE_URL}r/${result.id}`
   const warnings = result.signals.filter((s) => s.weight > 0)
   const goodSigns = result.signals.filter((s) => s.weight <= 0)
 
@@ -128,8 +130,8 @@ export default function ResultView({ result, showActions = true }: { result: Che
           >
             Warn family on WhatsApp
           </a>
-          <button className="btn btn-ghost" onClick={copyLink}>{copied ? 'Link copied ✓' : 'Copy result link'}</button>
-          {result.verdict !== 'low_risk' && result.entities.length > 0 && (
+          {!STATIC_DEMO && <button className="btn btn-ghost" onClick={copyLink}>{copied ? 'Link copied ✓' : 'Copy result link'}</button>}
+          {!STATIC_DEMO && result.verdict !== 'low_risk' && result.entities.length > 0 && (
             <Link
               className="btn btn-ghost"
               to={`/report?value=${encodeURIComponent(result.entities[0].raw)}&category=${result.category}`}
@@ -140,7 +142,9 @@ export default function ResultView({ result, showActions = true }: { result: Che
         </div>
       )}
       <p className="muted small privacy-note">
-        The shared link shows only the result, never your message.
+        {STATIC_DEMO
+          ? <>Demo version: this check ran entirely in your browser. <a href={REPO_URL} target="_blank" rel="noreferrer">See the full version</a>.</>
+          : 'The shared link shows only the result, never your message.'}
       </p>
     </section>
   )

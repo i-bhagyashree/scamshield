@@ -6,6 +6,8 @@ ScamShield checks SMS, WhatsApp messages, emails, links, phone numbers and UPI I
 
 > Built with React, TypeScript, Node.js/Express, SQLite and the Claude API.
 
+**🌐 Live demo: [i-bhagyashree.github.io/scamshield](https://i-bhagyashree.github.io/scamshield/)** (browser-only version: scam checks run in your browser; reporting, watchlist and family alerts need the full server version below)
+
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/i-bhagyashree/scamshield)
 
 ---
@@ -99,6 +101,14 @@ npm run build     # build server + client for production
 4. To test it, check a reported website from the Community page, or open the popup on any site to see its risk score.
 
 ## Deploy
+
+### Browser-only demo (GitHub Pages)
+
+Every push to `main` runs the tests and publishes a browser-only build to GitHub Pages
+(see [`.github/workflows/pages.yml`](.github/workflows/pages.yml)). It uses the same analyzer core as the server
+(`server/src/analyzer/core.ts`) with bundled sample community data. Build it locally with `npm run build:pages -w client`.
+
+### Full version
 
 The server also serves the built React app, so a single web service is enough.
 

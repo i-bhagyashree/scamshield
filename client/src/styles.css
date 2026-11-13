@@ -659,3 +659,11 @@ input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.85; 
 /* Sample-data notice */
 .demo-note { background: var(--warn-soft); color: var(--text); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; margin: 12px 0; }
 .demo-note-inline { grid-column: 1 / -1; margin: 0; border-radius: 0; border: 0; text-align: center; font-size: 0.82rem; padding: 6px; }
+
+/* Browser-only demo */
+.demo-banner { background: var(--warn-soft); color: var(--text); text-align: center; font-size: 0.88rem; padding: 8px 16px; border-bottom: 1px solid color-mix(in srgb, var(--warn) 30%, transparent); }
+.demo-banner a { color: var(--primary); font-weight: 600; }
+.full-version { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.full-version h1 { font-size: 1.6rem; margin-top: 8px; }
+.full-version p { max-width: 520px; }
+.full-version-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }

@@ -3,12 +3,13 @@ import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { useNotifications } from '../lib/notifications'
 import { useTheme } from '../lib/theme'
+import { REPO_URL, STATIC_DEMO } from '../lib/staticMode'
 
 const NAV = [
   { to: '/check', label: 'Check' },
   { to: '/lookup', label: 'Lookup' },
   { to: '/community', label: 'Community' },
-  { to: '/report', label: 'Report' },
+  ...(STATIC_DEMO ? [] : [{ to: '/report', label: 'Report' }]),
   { to: '/learn', label: 'Learn' },
 ]
 
@@ -30,6 +31,12 @@ export default function Layout() {
   return (
     <div className="app">
       <a className="skip-link" href="#main">Skip to content</a>
+      {STATIC_DEMO && (
+        <div className="demo-banner" role="note">
+          🧪 <strong>Demo version.</strong> Scam checks run in your browser. Reporting, watchlist and family alerts need the{' '}
+          <a href={REPO_URL} target="_blank" rel="noreferrer">full version on GitHub</a>.
+        </div>
+      )}
       <header className="topbar">
         <div className="container topbar-inner">
           <Link to="/" className="brand" onClick={() => setOpen(false)}>
@@ -49,7 +56,7 @@ export default function Layout() {
                 <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z" fill="currentColor" /></svg>
               )}
             </button>
-            {user && (
+            {user && !STATIC_DEMO && (
               <Link to="/notifications" className="icon-btn bell" aria-label={unread ? `${unread} new notifications` : 'Notifications'} onClick={() => setOpen(false)}>
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6V11a7 7 0 0 0-5.5-6.84V3.5a1.5 1.5 0 0 0-3 0v.66A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z" fill="currentColor" /></svg>
                 {unread > 0 && <span className="bell-count">{unread > 9 ? '9+' : unread}</span>}
@@ -63,7 +70,7 @@ export default function Layout() {
             {NAV.map((n) => (
               <NavLink key={n.to} to={n.to} className="nav-link">{n.label}</NavLink>
             ))}
-            <NavLink to="/dashboard" className="nav-link">My Shield</NavLink>
+            {!STATIC_DEMO && <NavLink to="/dashboard" className="nav-link">My Shield</NavLink>}
           </nav>
         </div>
       </header>

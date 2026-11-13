@@ -1,3 +1,5 @@
+import { STATIC_DEMO } from './staticMode'
+
 const DEVICE_KEY = 'scamshield_device'
 let memoryDeviceId: string | null = null
 
@@ -42,6 +44,16 @@ export function setDeviceId(id: string) {
 export const DEVICE_ID_PATTERN = /^[A-Za-z0-9_-]{20,64}$/
 
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
+  if (STATIC_DEMO) {
+    // Browser-only demo: loaded on demand so the normal build doesn't include it.
+    const { demoApi, DemoApiError } = await import('./demoApi')
+    try {
+      return await demoApi<T>(path, options)
+    } catch (err) {
+      if (err instanceof DemoApiError) throw new ApiError(err.message, err.status)
+      throw err
+    }
+  }
   let res: Response
   try {
     res = await fetch(`/api${path}`, {

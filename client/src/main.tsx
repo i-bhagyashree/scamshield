@@ -14,6 +14,8 @@ import HomePage from './pages/HomePage'
 import DashboardPage from './pages/DashboardPage'
 import NotificationsPage from './pages/NotificationsPage'
 import { NotificationsProvider } from './lib/notifications'
+import { STATIC_DEMO } from './lib/staticMode'
+import FullVersionNotice from './components/FullVersionNotice'
 
 function NotFound() {
   return <div className="card empty"><h1>Page not found</h1><Link to="/" className="btn btn-primary">Go home</Link></div>
@@ -21,7 +23,7 @@ function NotFound() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       <AuthProvider>
         <NotificationsProvider>
         <Routes>
@@ -30,13 +32,13 @@ createRoot(document.getElementById('root')!).render(
             <Route path="check" element={<CheckPage />} />
             <Route path="r/:id" element={<ResultPage />} />
             <Route path="lookup" element={<LookupPage />} />
-            <Route path="report" element={<ReportPage />} />
+            <Route path="report" element={STATIC_DEMO ? <FullVersionNotice feature="Reporting scammers" /> : <ReportPage />} />
             <Route path="community" element={<CommunityPage />} />
             <Route path="learn" element={<LearnPage />} />
             <Route path="login" element={<Navigate to="/dashboard" replace />} />
             <Route path="signup" element={<Navigate to="/dashboard" replace />} />
-            <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="notifications" element={<NotificationsPage />} />
+            <Route path="dashboard" element={STATIC_DEMO ? <FullVersionNotice feature="My Shield" /> : <DashboardPage />} />
+            <Route path="notifications" element={STATIC_DEMO ? <FullVersionNotice feature="Alerts" /> : <NotificationsPage />} />
             <Route path="history" element={<Navigate to="/dashboard#history" replace />} />
             <Route path="*" element={<NotFound />} />
           </Route>

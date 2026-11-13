@@ -4,6 +4,7 @@ import ReportCard from '../components/ReportCard'
 import { api, post } from '../lib/api'
 import { rupees, timeAgo } from '../lib/format'
 import { TYPE_LABEL, type EntityType, type Report } from '../lib/types'
+import { STATIC_DEMO } from '../lib/staticMode'
 
 interface LookupResult {
   type: EntityType
@@ -103,8 +104,8 @@ export default function LookupPage() {
                   <Link to={`/report?value=${encodeURIComponent(result.value)}`}>report it</Link> if it scammed you.
                 </p>
               )}
-              <WatchButton value={result.value} watching={result.watching} />
-              {!people && <p className="muted small watch-hint">Watch it and we'll alert you if anyone reports it later.</p>}
+              {!STATIC_DEMO && <WatchButton value={result.value} watching={result.watching} />}
+              {!people && !STATIC_DEMO && <p className="muted small watch-hint">Watch it and we'll alert you if anyone reports it later.</p>}
             </div>
           </section>
           <div className="stack">

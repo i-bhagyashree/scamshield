@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:pages": "tsc -b && VITE_STATIC_DEMO=1 VITE_BASE=/scamshield/ vite build --outDir dist-pages && cp dist-pages/index.html dist-pages/404.html"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
