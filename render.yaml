@@ -1,0 +1,25 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Dashboard → New → Blueprint → pick this repo. Everything below is applied automatically.
+services:
+  - type: web
+    name: scamshield
+    runtime: node
+    plan: free
+    # Install dev tools too (TypeScript, Vite) because the app is compiled during the build.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      # The free plan has no persistent disk, so the database resets on every restart or deploy.
+      # Sample data keeps the demo from looking empty, and the site labels it as sample data.
+      # On a paid plan with a disk, set SEED_DEMO=0 and DB_PATH=/var/data/scamshield.db.
+      - key: SEED_DEMO
+        value: "1"
+      # Optional: paste a Claude API key in the Render dashboard to turn on AI analysis.
+      - key: ANTHROPIC_API_KEY
+        sync: false

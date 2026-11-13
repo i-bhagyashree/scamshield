@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ScamShield</title>
+  <style>
+    :root { --bg:#fff; --text:#121826; --muted:#6b7385; --border:#e3e6ee; --soft:#f1f3f8; --primary:#5b3fd6; --danger:#c0262d; --warn:#b26b00; --ok:#15803d; color-scheme: light; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#161b24; --text:#e8ebf2; --muted:#8a93a3; --border:#2a3240; --soft:#1d2430; --primary:#a395ff; --danger:#f2777f; --warn:#e7b04a; --ok:#4cc38a; color-scheme: dark; } }
+    body { width: 340px; margin: 0; font: 14px/1.45 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); }
+    header { display:flex; align-items:center; gap:8px; padding:12px 14px; border-bottom:1px solid var(--border); font-weight:700; font-size:15px; }
+    header img { width:20px; height:20px; }
+    section { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+    .site { display:flex; align-items:center; gap:10px; }
+    .score { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; font-weight:800; background: var(--soft); flex-shrink:0; }
+    .dangerous .score { color: var(--danger); } .suspicious .score { color: var(--warn); } .low_risk .score { color: var(--ok); }
+    .host { font-weight:600; word-break: break-all; }
+    .verdict { color: var(--muted); font-size: 13px; }
+    ul { margin: 8px 0 0; padding-left: 18px; font-size: 13px; }
+    textarea, input { width: 100%; box-sizing: border-box; border:1px solid var(--border); border-radius:8px; padding:8px; font: inherit; background: var(--bg); color: var(--text); }
+    textarea { min-height: 70px; resize: vertical; }
+    button { margin-top: 8px; width: 100%; padding: 9px; border: 0; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; font: inherit; }
+    @media (prefers-color-scheme: dark) { button { color: #14102b; } }
+    .result { margin-top: 10px; font-size: 13px; }
+    .muted { color: var(--muted); font-size: 12px; }
+    details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+    label { display:block; margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .row { display:flex; align-items:center; gap:6px; margin-top:8px; font-size: 13px; }
+    .row input { width:auto; }
+    a { color: var(--primary); }
+  </style>
+</head>
+<body>
+  <header><img src="icons/icon48.png" alt="" /> ScamShield</header>
+
+  <section>
+    <h2>This website</h2>
+    <div id="site" class="site"><div class="score">…</div><div><div class="host" id="host">Checking…</div><div class="verdict" id="verdict"></div></div></div>
+    <ul id="reasons"></ul>
+  </section>
+
+  <section>
+    <h2>Check a message</h2>
+    <textarea id="text" placeholder="Paste an SMS, WhatsApp message, link, number or UPI ID"></textarea>
+    <button id="check">Check</button>
+    <div id="result" class="result"></div>
+  </section>
+
+  <section>
+    <details>
+      <summary>Settings</summary>
+      <div class="row"><input type="checkbox" id="enabled" /> <label for="enabled" style="margin:0">Warn me about dangerous websites</label></div>
+      <label>API server <input id="apiBase" /></label>
+      <label>Web app <input id="appBase" /></label>
+      <button id="save">Save</button>
+      <p class="muted">Only the website's domain name is sent for checks, never the full address or page content.</p>
+    </details>
+  </section>
+  <script src="popup.js"></script>
+</body>
+</html>
