@@ -6,6 +6,8 @@ ScamShield checks SMS, WhatsApp messages, emails, links, phone numbers and UPI I
 
 > Built with React, TypeScript, Node.js/Express, SQLite and the Claude API.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/i-bhagyashree/scamshield)
+
 ---
 
 ## Why
